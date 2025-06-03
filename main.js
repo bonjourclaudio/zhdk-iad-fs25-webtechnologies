@@ -26,4 +26,22 @@ async function readExJson() {
   }
 }
 
-readExJson();
+function getCurrentLocation() {
+  const path = window.location.pathname;
+  const parts = path.split('/');
+
+  // if it's a subfolder, return path, otherwise return the last part
+  if (parts.length > 1 && parts[parts.length - 1] === '') {
+    return path;
+  } else {
+    return parts[parts.length - 1];
+  }
+}
+
+// wait until the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  if (getCurrentLocation() === 'index.html') {
+    readExJson();
+  }
+});
+
