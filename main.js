@@ -6,12 +6,19 @@ async function readExJson() {
 
     exercises.forEach(ex => {
 
+
+      const num = ex.substring(
+        ex.replace("ex", "").indexOf("_") + 1,
+        ex.indexOf("ex") + 4, 
+        ex.lastIndexOf(ex.split("_")),
+      );
+
       const parts = ex.split('_');
       const day = parts[1];
       const month = parts[2];
       const year = parts[3];
       const formattedDate = `${day}.${month}.${year}`;
-      const formattedName = `Day ${day} [${formattedDate}] - ${parts[4].toUpperCase()}`;
+      const formattedName = `Day ${num} - [${formattedDate}] - ${parts[4].toUpperCase()}`;
 
       const li = document.createElement('li');
       const a = document.createElement('a');
