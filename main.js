@@ -40,8 +40,6 @@ function getCurrentLocation() {
 
 // wait until the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  if (getCurrentLocation() === 'index.html') {
     readExJson();
-  }
 });
 
