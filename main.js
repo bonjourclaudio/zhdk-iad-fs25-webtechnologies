@@ -40,6 +40,7 @@ function getCurrentLocation() {
 
 // wait until the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
+  console.log("loaded, reading exercises.json");
     readExJson();
 });
 
