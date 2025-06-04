@@ -1,0 +1,96 @@
+$primary-color: #4CAF50;
+$secondary-color: #FFE2DD;
+$font-family: monospace;
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+::selection {
+        background-color: $primary-color;
+        color: white;
+    }
+
+p {
+    margin: 0;
+    padding: 0;
+
+    
+}
+
+.wrapper {
+    width: 100vw;
+    height: 100vh;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    height: 100%;
+    width: 100%;
+    grid-template-areas:
+        "intro . . . . . description description . image image image"
+        ". . . . . . random random . . . ."
+        "form form form form . . animation animation . . . .";
+    
+    gap: 5px;
+    font-family: $font-family;
+    background-color: $secondary-color;
+}
+
+.section {
+    width: 100% auto;
+    height: 100% auto;
+
+
+    &.intro {
+        grid-area: intro;
+    }
+    
+    &.description {
+        grid-area: description;
+    }
+
+    &.form {
+        grid-area: form;
+
+        img {
+            width: 70%;
+            object-fit: cover;
+            float: left;
+            clip-path: url("./assets/gsehundgseh.svg");
+            shape-outside: url("./assets/gsehundgseh.svg");
+        }
+    }
+
+    &.animation {
+        grid-area: animation;
+    }
+
+    &.image {
+        grid-area: image;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+
+            &:hover {
+                z-index: -1;
+                transform: skewX(15deg);
+                transition: transform 0.3s ease-in-out;
+                filter: blur(30px);
+            }
+        }
+
+    }
+
+    &.random {
+        grid-area: random;
+    }
+
+}
