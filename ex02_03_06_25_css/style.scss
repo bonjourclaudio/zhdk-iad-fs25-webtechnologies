@@ -2,6 +2,28 @@ $primary-color: #4CAF50;
 $secondary-color: #FFE2DD;
 $font-family: monospace;
 
+@-webkit-keyframes dreher {
+  0% {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+  }
+  100% {
+    -webkit-transform: rotateX(-360deg);
+            transform: rotateX(-360deg);
+  }
+}
+@keyframes dreher {
+  0% {
+    -webkit-transform: rotateX(0);
+            transform: rotateX(0);
+  }
+  100% {
+    -webkit-transform: rotateX(-360deg);
+            transform: rotateX(-360deg);
+  }
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -69,7 +91,22 @@ p {
 
     &.animation {
         grid-area: animation;
+
+        img.rotating {
+            width: 10vw;
+            height: 10vw;
+
+	        -webkit-animation: dreher 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+	        animation: dreher 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) infinite both;
+
+            &:hover {
+                -webkit-animation-play-state: paused;
+                animation-play-state: paused;
+            }
+        }
     }
+
+    
 
     &.image {
         grid-area: image;
@@ -94,3 +131,4 @@ p {
     }
 
 }
+
