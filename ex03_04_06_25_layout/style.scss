@@ -1,0 +1,159 @@
+$primary-color: #000000;
+$secondary-color: #ffffff;
+$font-family: monospace;
+
+body {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  background-color: $secondary-color;
+}
+
+p {
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: $primary-color;
+  text-transform: uppercase;
+
+  &:hover {
+    color: $secondary-color;
+    background-color: $primary-color;
+  }
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.wrapper {
+  margin: 20px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto;
+  column-gap: 20px;
+  grid-template-areas: "content content content content content content content content sidebar sidebar sidebar sidebar";
+}
+
+.sidebar {
+  grid-area: sidebar;
+  height: calc(100vh - 40px);
+  position: fixed;
+  z-index: 10;
+  left: calc((100vw / 12) * 8);
+  width: calc(((100vw / 12) * 4) - 20px);
+
+  &__nav {
+    height: 10vh;
+    width: 100%;
+
+    display: inline-flex;
+    justify-content: space-between;
+
+    &__home {
+    }
+
+    &__about {
+    }
+
+    &__logo {
+    }
+  }
+
+  &__content {
+    height: 60vh;
+
+    &__description {
+      position: relative;
+      width: 70%;
+      top: 20vh;
+    }
+  }
+
+  &__footer {
+    height: 10vh;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+
+    &__links {
+      height: 100%;
+      width: 100%;
+      display: inline-flex;
+      justify-content: space-between;
+
+      align-items: flex-end;
+
+      &__socials {
+      }
+
+      &__instagram {
+      }
+
+      &__mail {
+      }
+    }
+  }
+}
+
+.content-container {
+  grid-area: content;
+  height: auto;
+  width: 100%;
+}
+
+.content-elem {
+  width: 100%;
+  position: sticky;
+
+  &__media {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+
+    &__elem {
+      width: calc(50% - 40px);
+
+      &:first-child {
+        padding-right: 20px;
+      }
+
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  &__description {
+    height: 40vh;
+    width: calc(100% - 60px);
+
+    display: inline-flex;
+    justify-content: space-between;
+
+    div {
+      position: relative;
+      top: 5vh;
+    }
+
+    .content {
+      width: 50%;
+    }
+  }
+
+  &__number {
+    width: fit-content;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}

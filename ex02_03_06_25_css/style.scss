@@ -86,6 +86,11 @@ p {
             float: left;
             clip-path: url("./assets/gsehundgseh.svg");
             shape-outside: url("./assets/gsehundgseh.svg");
+
+            &:hover {
+                scale: 1.2;
+                transition: scale 0.3s ease-in-out;
+            }
         }
     }
 
