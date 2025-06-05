@@ -1,85 +1,95 @@
 body {
-    font-family: monospace;
-    background-color: white;
-    margin: 0;
-    color: #0000ff;
+  font-family: monospace;
+  background-color: white;
+  margin: 0;
+  color: #0000ff;
 }
 
 ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 a {
-    color: #0000ff;
+  color: #0000ff;
 
-    &:hover {
-        color: white;
-        background-color: #0000ff;
-    }
+  &:hover {
+    color: white;
+    background-color: #0000ff;
+  }
 }
 
 ::selection {
-    background-color: #0000ff;
-    color: white;
+  background-color: #0000ff;
+  color: white;
 }
 
+.wrapper {
+  margin: 20px;
+}
 // Header
 .header {
-    width: 100vw;
-    height: 20vh auto;
+  width: 100%;
+  height: 20vh auto;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-    grid-template-areas: 
-        "title elements";
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "title elements";
 
-    &__title {
-        grid-area: title;
-    }
+  @media screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "elements";
+  }
 
-    &__elements {
-        grid-area: elements;
+  &__title {
+    grid-area: title;
+  }
+
+  &__elements {
+    grid-area: elements;
+    display: inline-flex;
+    justify-content: space-between;
+
+    &__item {
+      .desc {
+        width: 40%;
+      }
+
+      .links {
+        width: 100%;
         display: inline-flex;
-        justify-content: space-between;
 
-        &__item {
-
-            .desc {
-                width: 30%;
-            }
-
-            .link {
-                width: 30%;
-            }
+        .link {
+          &:first-child {
+            margin-right: 20px;
+          }
         }
-
-       
+      }
     }
-
+  }
 }
 
 // Exercise List
 .exerciseContainer {
-    padding-top: 5vh;
-    width: 100vw;
+  padding-top: 5vh;
+  width: 100%;
 }
 
 #exerciseList {
-    width: 100%;
+  width: 100%;
 
-    li {
-        padding-left: 20px;
-        border-bottom: 1px solid #0000ff;
-        a {
-            text-decoration: none;
-        }
+  li {
+    padding-left: 20px;
+    border-bottom: 1px solid #0000ff;
+    a {
+      text-decoration: none;
     }
-
-   
+  }
 }

@@ -1,5 +1,6 @@
 $primary-color: #000000;
 $secondary-color: #ffffff;
+$accent-color: #f6ff00;
 $font-family: monospace;
 
 body {
@@ -9,6 +10,10 @@ body {
   box-sizing: border-box;
   overflow-x: hidden;
   background-color: $secondary-color;
+}
+
+::selection {
+  background-color: $accent-color;
 }
 
 p {
@@ -64,6 +69,7 @@ a {
     }
 
     &__logo {
+      font-weight: bold;
     }
   }
 
