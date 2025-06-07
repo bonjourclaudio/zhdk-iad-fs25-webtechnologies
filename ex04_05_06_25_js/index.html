@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Javascript - 05.06.2025 | Webtechnologies IAD FS 25 | ZHdK | Claudio
+      Weckherlin
+    </title>
+
+    <link rel="shortcut icon" href="../favicon.svg" type="image/x-icon" />
+
+    <base href="/ex04_05_06_25_js/" />
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <script src="../main.js"></script>
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="header">
+        <h1>tasks haha</h1>
+      </div>
+
+      <div class="formContainer">
+        <form class="formContainer__form">
+          <label for="taskTitle">Task Title</label>
+          <input type="text" id="taskTitle" placeholder="Task Title" required />
+
+          <label for="taskDescription">Task Title</label>
+          <textarea
+            placeholder="Task Description"
+            name="taskDescription"
+            id="taskDescription"
+            required
+          ></textarea>
+
+          <label for="taskDueDate">Due Date</label>
+          <input
+            type="date"
+            id="taskDueDate"
+            placeholder="Enter a task"
+            required
+          />
+
+          <button type="submit">Add Task</button>
+        </form>
+        <ul id="taskList"></ul>
+      </div>
+    </div>
+  </body>
+</html>

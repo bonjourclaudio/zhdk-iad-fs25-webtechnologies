@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      FINAL PROJECT | Webtechnologies IAD FS 25 | ZHdK | Claudio Weckherlin
+    </title>
+
+    <link rel="shortcut icon" href="../favicon.svg" type="image/x-icon" />
+
+    <base href="/ex05_06_06_25_final/" />
+
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- P5 JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/p5.js"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/p5@1.11.7/lib/addons/p5.sound.min.js"
+      defer
+    ></script>
+
+    <!-- CUSTOM SCRIPTS -->
+    <script src="../main.js" defer></script>
+    <script src="./script.js" defer></script>
+    <script src="./generative.js" defer></script>
+  </head>
+  <body>
+    <div class="menu">
+      <input id="stationInput" placeholder="Enter station name" />
+      <button id="loadButton">Load connections</button>
+      <div class="loader" style="display: none">Loading...</div>
+    </div>
+    <div id="p5Container"></div>
+  </body>
+</html>
