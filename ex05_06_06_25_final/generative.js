@@ -1,7 +1,7 @@
 let canvas;
 
 let cols, rows, size;
-const targetCellSize = 30;
+const targetCellSize = 50;
 
 let soundTracks = [];
 let currentTrackIndex = 0;
@@ -25,7 +25,7 @@ function preload() {
 }
 
 function setup() {
-  fft = new p5.FFT();
+  fft = new p5.FFT(0.9, 1024);
 
   const parent = document.getElementById("p5Container");
   canvas = createCanvas(parent.offsetWidth, parent.offsetHeight, WEBGL);
@@ -56,6 +56,8 @@ function playNextTrack() {
   currentSound = soundTracks[currentTrackIndex];
   currentSound.play();
 
+  fft.setInput(currentSound);
+
   currentTrackIndex = (currentTrackIndex + 1) % soundTracks.length;
 }
 
@@ -68,20 +70,24 @@ function draw() {
   pointLight(255, 255, 255, width / 2, height / 2, 500);
 
   // Stop if no destination is available
-  if (
-    !connectionContainer ||
-    connectionContainer.destinationStations.length === 0
-  ) {
+  if (!connectionContainer || connectionContainer.stations.length === 0) {
     return;
   }
 
   drawGrid();
   initMap();
 
-  /*
-  let x = 400 * cos(frameCount * 0.01);
-  camera(x, -400, 800);
-  */
+  let x = (width / 2) * cos(frameCount * 0.01);
+  let y = (height / 2) * sin(frameCount * 0.01);
+  let z = (height / 2) * sin(frameCount * 0.01);
+  translate(x, y, z);
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+
+  let cameraX = (width / 2) * cos(frameCount * 0.01);
+  let cameraY = (height / 2) * sin(frameCount * 0.01);
+  let cameraZ = (height / 2) * sin(frameCount * 0.01);
+  camera(cameraX, cameraY, cameraZ, width / 2, height / 2, 0, 0, 1, 0);
 }
 
 function drawGrid() {
@@ -103,7 +109,7 @@ function drawGrid() {
       rotateY(t * 0.1 + j * 0.1 * offset);
       stroke(255, 50);
       noFill();
-      rect(0, 0, size, size);
+      circle(0, 0, size);
       pop();
     }
   }
@@ -131,37 +137,43 @@ function translateCoordinates(lat, lon) {
 }
 
 function initMap() {
-  /**
-   * Draw Departure Station
-   */
-  let departureVector = translateCoordinates(
-    connectionContainer.departureStation.lat,
-    connectionContainer.departureStation.lon
-  );
+  fft.analyze();
 
-  // Fill the cell of the grid where the departure station is located
-  const departureCellX = Math.floor(departureVector.x / size);
-  const departureCellY = Math.floor(departureVector.y / size);
-  fill(0, 0, 255, 100);
-  noStroke();
-  // Simple rectangle for testing
-  // rect(departureCellX * size, departureCellY * size, size, size);
+  let bass = fft.getEnergy("bass");
+  let lowMid = fft.getEnergy("lowMid");
+  let mid = fft.getEnergy("mid");
+  let highMid = fft.getEnergy("highMid");
+  let treble = fft.getEnergy("treble");
 
-  push();
-  translate(departureCellX * size, departureCellY * size, 0);
-  fill(0, 0, 255, 150);
-  rect(0, 0, size, size);
-  pop();
+  // Normalize the energy values to a range suitable for visualization
+  bass = map(bass, 0, 255, 0, size * 0.5);
+  lowMid = map(lowMid, 0, 255, 0, size * 0.5);
+  mid = map(mid, 0, 255, 0, size * 0.5);
+  highMid = map(highMid, 0, 255, 0, size * 0.5);
+  treble = map(treble, 0, 255, 0, size * 0.5);
 
-  // Offset each cell with Perlin noise for smooth movement
-  /*  let noiseVal = noise(i * 0.2, j * 0.2, t);
-  let offset = map(noiseVal, 0, 1, -size * 0.1, size * 0.1);
+  let t = millis() * 0.0005;
 
-  push();
-  translate(departureCellX + size, departureCellY + size, 0);
-  rotateX(t * 0.1 + i * 0.1 * offset);
-  rotateY(t * 0.1 + j * 0.1 * offset);
-  fill(255, 50);
-  box(size);
-  pop();*/
+  connectionContainer.stations.forEach((station) => {
+    const vector = translateCoordinates(station.lat, station.lon);
+
+    // Fill the cell of the grid where the station is located
+    const cellX = Math.floor(vector.x / size);
+    const cellY = Math.floor(vector.y / size);
+    fill(255);
+    noStroke();
+
+    let noiseVal = noise(cellX * 0.2, cellY * 0.2, t);
+    let offset = map(noiseVal, 0, 1, -size * 0.1, size * 0.1);
+
+    push();
+    translate(cellX * size, cellY * size, 0);
+    rotate(t * 0.1 + cellX * 0.1 * offset);
+    scale(bass * offset * 0.2);
+    stroke(255 * noiseVal);
+    sphere(size);
+    pop();
+
+    //drawConnection(connectionContainer.stations[0], station);
+  });
 }

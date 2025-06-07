@@ -11,16 +11,13 @@ class Station {
 }
 
 class Connection {
-  departureStation;
-  destinationStations = [];
+  stations = [];
 
-  constructor(departureStation) {
-    this.departureStation = departureStation;
-  }
+  constructor() {}
 
-  addDestinationStation(station) {
+  addStation(station) {
     if (station instanceof Station) {
-      this.destinationStations.push(station);
+      this.stations.push(station);
     } else {
       console.error("Invalid station object");
     }
@@ -63,7 +60,8 @@ async function fetchConnections(stationName) {
       toggleLoading(false);
       return;
     } else {
-      connectionContainer = new Connection(departureStation);
+      connectionContainer = new Connection();
+      connectionContainer.addStation(departureStation);
 
       // Process each entry in the stationboard
       data.stationboard.forEach((entry) => {
@@ -82,7 +80,7 @@ async function fetchConnections(stationName) {
             destinationStation.lat = coords.lat;
             destinationStation.lon = coords.lon;
 
-            connectionContainer.addDestinationStation(destinationStation);
+            connectionContainer.addStation(destinationStation);
           });
         }
       });
