@@ -91,6 +91,7 @@ async function fetchConnections(stationName) {
     console.error("Error fetching transport data:", error);
   } finally {
     toggleLoading(false);
+    displayInfo();
     console.log("connection container", connectionContainer);
   }
 }
@@ -158,5 +159,26 @@ function toggleLoading(status) {
   const loader = document.querySelector(".loader");
   if (loader) {
     loader.style.display = status ? "block" : "none";
+  }
+}
+
+function displayInfo() {
+  const track = document.querySelector("#track");
+  const station = document.querySelector("#station");
+  const time = document.querySelector("#time");
+
+  // append info to the <p> tag of each div
+  if (connectionContainer && connectionContainer.stations.length > 0) {
+    const departureStation = connectionContainer.stations[0];
+    track.textContent = `Track: ${soundTracks[currentTrackIndex].url}`;
+    station.textContent = `Station: ${departureStation.name}`;
+    // time should be the current time in HH:MM:SS format - updating every second
+    setInterval(() => {
+      time.textContent = `Time: ${new Date().toLocaleTimeString()}`;
+    }, 1000);
+  } else {
+    track.textContent = "No track information available.";
+    station.textContent = "No station information available.";
+    time.textContent = "No time information available.";
   }
 }
