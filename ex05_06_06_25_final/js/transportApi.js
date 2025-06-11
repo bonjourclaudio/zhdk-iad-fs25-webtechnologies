@@ -1,15 +1,20 @@
-/**
- * Global Connection Variable
- * Holds a connection from a departure station to multiple destination stations.
- */
-let connectionContainer;
+let connectionContainer; // Global variable to hold the current connection data
 
+/**
+ * Station Class
+ * Represents a train station with a name and coordinates.
+ */
 class Station {
   name;
   lat;
   lon;
 }
 
+/**
+ * Connection Class
+ * Represents a connection between multiple stations.
+ * The first station in the array is the departure station
+ */
 class Connection {
   stations = [];
 
@@ -26,12 +31,13 @@ class Connection {
 
 /**
  * Fetches connections for a given station name.
+ * @param {string} stationName - The name of the station to fetch connections for.
  */
 async function fetchConnections(stationName) {
   toggleLoading(true);
 
   try {
-    // Fetch station coordinates (optional → if you don't need distance, you can skip this)
+    // Fetch coordinates for the given station name
     const stationCoords = await fetchStationCoordinates(stationName);
     if (!stationCoords) {
       console.error("Station coordinates not found.");
@@ -47,7 +53,6 @@ async function fetchConnections(stationName) {
     /**
      * Fetch stationboard for the given station
      */
-
     const url = `https://transport.opendata.ch/v1/stationboard?station=${encodeURIComponent(
       stationName
     )}&limit=20`;
@@ -63,7 +68,7 @@ async function fetchConnections(stationName) {
       connectionContainer = new Connection();
       connectionContainer.addStation(departureStation);
 
-      // Process each entry in the stationboard
+      // -> Retrieve coordinates for each destination station
       data.stationboard.forEach((entry) => {
         if (entry) {
           let coords = fetchStationCoordinates(entry.to);
@@ -86,6 +91,7 @@ async function fetchConnections(stationName) {
       });
     }
 
+    // Toggle p5 sound output
     playNextTrack();
   } catch (error) {
     console.error("Error fetching transport data:", error);
@@ -99,6 +105,8 @@ async function fetchConnections(stationName) {
 /**
  * Fetches coordinates for a given station name.
  * Returns an object with latitude and longitude.
+ * @param {string} stationName - The name of the station to fetch coordinates for.
+ * @returns {Promise<{lat: number, lon: number}>} - An object containing latitude and longitude.
  */
 async function fetchStationCoordinates(stationName) {
   const url = `https://transport.opendata.ch/v1/locations?query=${encodeURIComponent(
@@ -124,78 +132,5 @@ async function fetchStationCoordinates(stationName) {
   } catch (error) {
     console.error("Error fetching station coordinates:", error);
     return null;
-  }
-}
-
-/**
- * Computes the distance between two Stations using the Haversine formula.
- * Return the distance in kilometers.
- */
-function computeDistance(station1, station2) {
-  if (station1 instanceof Station && station2 instanceof Station) {
-    const R = 6371; // Earth's radius in kilometers
-
-    const dLat = radians(station2.lat - station1.lat);
-    const dLon = radians(station2.lon - station1.lon);
-
-    const a =
-      sin(dLat / 2) * sin(dLat / 2) +
-      cos(radians(lat1)) * cos(radians(lat2)) * sin(dLon / 2) * sin(dLon / 2);
-
-    const c = 2 * atan2(sqrt(a), sqrt(1 - a));
-
-    const distance = R * c; // Distance in km
-    return distance;
-  } else {
-    console.error("Invalid station objects provided for distance calculation.");
-    return null;
-  }
-}
-
-/**
- * Toggles the visibility of the loading indicator.
- */
-function toggleLoading(status) {
-  const loader = document.querySelector(".loader");
-  if (loader) {
-    loader.style.display = status ? "block" : "none";
-  }
-}
-
-function displayInfo() {
-  const track = document.querySelector("#track");
-  const station = document.querySelector("#station");
-  const time = document.querySelector("#time");
-
-  // append info to the <p> tag of each div
-  if (connectionContainer && connectionContainer.stations.length > 0) {
-    const departureStation = connectionContainer.stations[0];
-    track.textContent = `Track: ${soundTracks[currentTrackIndex].url}`;
-    station.textContent = `Station: ${departureStation.name}`;
-    // time should be the current time in HH:MM:SS format - updating every second
-    setInterval(() => {
-      time.textContent = `Time: ${new Date().toLocaleTimeString()}`;
-    }, 1000);
-  } else {
-    track.textContent = "No track information available.";
-    station.textContent = "No station information available.";
-    time.textContent = "No time information available.";
-  }
-}
-
-document
-  .querySelector("#fsBtn")
-  .addEventListener("click", enableFullscreen, false);
-
-function enableFullscreen() {
-  const p5Container = document.getElementById("p5Container");
-  if (p5Container.requestFullscreen) {
-    p5Container.requestFullscreen();
-  } else if (p5Container.mozRequestFullScreen) {
-    p5Container.mozRequestFullScreen(); // Firefox
-  } else if (p5Container.webkitRequestFullscreen) {
-    p5Container.webkitRequestFullscreen(); // Chrome, Safari and Opera
-  } else if (p5Container.msRequestFullscreen) {
-    p5Container.msRequestFullscreen(); // IE/Edge
   }
 }

@@ -11,6 +11,7 @@
 
     <base href="/ex05_06_06_25_final/" />
 
+    <!-- STYLES -->
     <link rel="stylesheet" href="./style.css" />
 
     <!-- P5 JS -->
@@ -25,11 +26,14 @@
 
     <!-- CUSTOM SCRIPTS -->
     <script src="../main.js" defer></script>
-    <script src="./script.js" defer></script>
-    <script src="./generative.js" defer></script>
+    <script src="./js/script.js" defer></script>
+    <script src="./js/generative.js" defer></script>
+    <script src="./js/transportApi.js" defer></script>
   </head>
   <body>
+    <!-- MAIN LAYOUT - GRID -->
     <div class="layout">
+      <!-- MENU CARD / INTERACTIVE -->
       <div class="menu">
         <div class="menu__title">Visualise Transport</div>
 
@@ -45,6 +49,7 @@
         </div>
       </div>
 
+      <!-- INFORMATION HEADER -->
       <div class="information">
         <div>claudio weckherlin</div>
         <div>iad fs25 - zhdk</div>
@@ -54,6 +59,7 @@
         </div>
       </div>
 
+      <!-- P5JS / VISUALS-->
       <div class="visuals">
         <div class="visuals__container" id="p5Container">
           <div class="visuals__loader">loading...</div>
