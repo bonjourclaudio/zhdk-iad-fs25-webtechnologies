@@ -87,7 +87,7 @@ function setup() {
 
 // Main P5 draw function - called every frame
 function draw() {
-  background(0);
+  background(0, 0, 255);
 
   // If the intro animation is active, draw it
   if (showIntro) {

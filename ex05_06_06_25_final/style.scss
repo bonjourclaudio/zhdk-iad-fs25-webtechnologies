@@ -1,6 +1,6 @@
-$primary-color: #000000;
-$secondary-color: #ffffff;
-$accent-color: #f6ff00;
+$primary-color: #ffffff;
+$secondary-color: #1100ff;
+$accent-color: #1100ff;
 $font-family: monospace;
 
 body {
@@ -135,6 +135,12 @@ a {
       &:hover {
         background-color: $primary-color;
         color: $secondary-color;
+      }
+
+      &.loading {
+        background-color: $primary-color;
+        color: $secondary-color;
+        cursor: not-allowed;
       }
     }
   }

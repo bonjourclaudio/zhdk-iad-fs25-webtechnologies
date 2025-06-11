@@ -3,9 +3,10 @@
  * @param {boolean} status - true to show the loader, false to hide it.
  */
 function toggleLoading(status) {
-  const loader = document.querySelector(".loader");
+  const loader = document.querySelector("#loadButton");
   if (loader) {
-    loader.style.display = status ? "block" : "none";
+    loader.textContent = status ? "loading..." : "Load Connections";
+    loader.classList.toggle("loading", status);
   }
 }
 
