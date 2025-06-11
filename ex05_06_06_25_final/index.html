@@ -29,19 +29,42 @@
     <script src="./generative.js" defer></script>
   </head>
   <body>
-    <div class="menu">
-      <input id="stationInput" placeholder="Enter station name" />
-      <button id="loadButton">Load connections</button>
-      <div class="loader" style="display: none">Loading...</div>
-    </div>
+    <div class="layout">
+      <div class="menu">
+        <div class="menu__title">Visualise Transport</div>
 
-    <div class="information">
-      <div class="information__track" id="track"></div>
-      <div class="information__station" id="station"></div>
-      <div class="information_time" id="time"></div>
-      <div class="information__about">claudio weckherlin, iad fs25 - zhdk</div>
-    </div>
+        <div class="menu__form">
+          <label for="stationInput">Enter a Station</label>
+          <input
+            class="stationInput"
+            id="stationInput"
+            placeholder="Departure Station Name"
+          />
+          <button class="submitBtn" id="loadButton">Load connections</button>
+          <div class="loader" style="display: none">Loading...</div>
+        </div>
+      </div>
 
-    <div id="p5Container"></div>
+      <div class="information">
+        <div>claudio weckherlin</div>
+        <div>iad fs25 - zhdk</div>
+        <div>webtechnologies</div>
+        <div>
+          <a href="https://github.com/bonjourclaudio">github</a>
+        </div>
+      </div>
+
+      <div class="visuals">
+        <div class="visuals__container" id="p5Container">
+          <div class="visuals__loader">loading...</div>
+        </div>
+
+        <div class="visuals__info">
+          <div id="station"></div>
+          <div id="track"></div>
+          <div id="time"></div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
