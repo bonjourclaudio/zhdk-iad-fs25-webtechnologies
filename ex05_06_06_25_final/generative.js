@@ -71,6 +71,7 @@ function draw() {
     // Check if intro time is over
     if (millis() - introStartTime > introDuration) {
       showIntro = false;
+      document.querySelector("#visInfo").style.display = "flex";
     }
 
     return; // Skip drawing the visuals while intro is shown

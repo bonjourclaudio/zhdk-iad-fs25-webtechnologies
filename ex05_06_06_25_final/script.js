@@ -182,3 +182,20 @@ function displayInfo() {
     time.textContent = "No time information available.";
   }
 }
+
+document
+  .querySelector("#fsBtn")
+  .addEventListener("click", enableFullscreen, false);
+
+function enableFullscreen() {
+  const p5Container = document.getElementById("p5Container");
+  if (p5Container.requestFullscreen) {
+    p5Container.requestFullscreen();
+  } else if (p5Container.mozRequestFullScreen) {
+    p5Container.mozRequestFullScreen(); // Firefox
+  } else if (p5Container.webkitRequestFullscreen) {
+    p5Container.webkitRequestFullscreen(); // Chrome, Safari and Opera
+  } else if (p5Container.msRequestFullscreen) {
+    p5Container.msRequestFullscreen(); // IE/Edge
+  }
+}
