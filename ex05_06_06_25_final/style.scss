@@ -15,6 +15,10 @@ body {
   box-sizing: border-box;
   overflow: hidden;
   background-color: $primary-color;
+
+  @media screen and (max-width: 768px) {
+    overflow-y: auto;
+  }
 }
 
 input {
@@ -37,6 +41,13 @@ a {
   grid-template-rows: 5vh repeat(11, 1fr);
   width: calc(100vw - 20px);
   height: 100vh;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 5vh repeat(11, 1fr);
+    width: calc(100vw - 20px);
+    min-height: 100vh;
+  }
 }
 
 .visuals {
@@ -45,6 +56,11 @@ a {
   // use 6 columns and 6 rows
   grid-column: 4 / span 7;
   grid-row: 4 / span 7;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1 / span 6;
+    grid-row: 7 / span 9;
+  }
 
   &__container {
     height: 100%;
@@ -73,6 +89,11 @@ a {
     text-transform: uppercase;
 
     font-size: 0.9rem;
+
+    @media screen and (max-width: 768px) {
+      top: 30vh;
+      position: relative;
+    }
 
     @include alfabet(400, italic);
 
@@ -104,6 +125,11 @@ a {
   grid-row: 4 / span 5;
   background-color: $secondary-color;
   padding: 10px;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1 / span 6;
+    grid-row: 3 / span 3;
+  }
 
   &__title {
     color: $primary-color;
@@ -216,4 +242,10 @@ a {
   text-transform: uppercase;
 
   border-bottom: 1px solid $secondary-color;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1 / span 6;
+    grid-row: 1 / span 2;
+    flex-wrap: wrap;
+  }
 }
