@@ -4,6 +4,7 @@
  */
 function toggleLoading(status) {
   const loader = document.querySelector("#loadButton");
+
   if (loader) {
     loader.textContent = status ? "loading..." : "Load Connections";
     loader.classList.toggle("loading", status);

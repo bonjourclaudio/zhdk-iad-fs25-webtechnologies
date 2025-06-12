@@ -1,15 +1,24 @@
 $primary-color: #ffffff;
 $secondary-color: #1100ff;
 $accent-color: #1100ff;
-$font-family: monospace;
+
+@mixin alfabet($weight: 400, $style: normal) {
+  font-family: "alfabet", sans-serif;
+  font-weight: $weight;
+  font-style: $style;
+}
 
 body {
-  font-family: $font-family;
+  @include alfabet();
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
   background-color: $primary-color;
+}
+
+input {
+  all: unset;
 }
 
 a {
@@ -25,15 +34,17 @@ a {
   margin: 10px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(12, 1fr);
+  grid-template-rows: 5vh repeat(11, 1fr);
   width: calc(100vw - 20px);
   height: 100vh;
 }
 
 .visuals {
+  visibility: hidden;
+
   // use 6 columns and 6 rows
-  grid-column: 5 / span 6;
-  grid-row: 4 / span 6;
+  grid-column: 4 / span 7;
+  grid-row: 4 / span 7;
 
   &__container {
     height: 100%;
@@ -61,8 +72,14 @@ a {
     padding-top: 10px;
     text-transform: uppercase;
 
+    font-size: 0.9rem;
+
+    @include alfabet(400, italic);
+
     #fsBtn {
       cursor: pointer;
+      @include alfabet(bold, italic);
+      text-align: right;
 
       &:hover {
         text-decoration: underline;
@@ -78,7 +95,7 @@ a {
 .menu {
   // use 3 cols and 3 rows on the right side
   grid-column: 1 / span 1;
-  grid-row: 4 / span 4;
+  grid-row: 4 / span 5;
   background-color: $secondary-color;
   padding: 10px;
 
@@ -86,6 +103,8 @@ a {
     color: $primary-color;
     font-size: 1.5rem;
     height: 30%;
+
+    @include alfabet(bold, normal);
   }
 
   &__form {
@@ -116,6 +135,28 @@ a {
       &:focus {
         border-color: $primary-color;
       }
+
+      &::placeholder {
+        font-size: 1rem;
+        @include alfabet(400, italic);
+      }
+    }
+
+    .autocomplete-items {
+      width: 100%;
+      max-height: 50%;
+      overflow-y: auto;
+    }
+
+    .autocomplete-items div {
+      padding: 8px;
+      cursor: pointer;
+      color: $primary-color;
+    }
+
+    .autocomplete-items div:hover {
+      background-color: $primary-color;
+      color: $secondary-color;
     }
 
     .submitBtn {
@@ -124,22 +165,30 @@ a {
       right: 0;
       height: 2rem;
 
-      color: $primary-color;
+      width: 100%;
 
-      background-color: $secondary-color;
+      color: $secondary-color;
+
+      background-color: $primary-color;
       border: 1px solid $primary-color;
       text-transform: uppercase;
 
       cursor: pointer;
 
       &:hover {
-        background-color: $primary-color;
-        color: $secondary-color;
+        background-color: $secondary-color;
+        color: $primary-color;
       }
 
       &.loading {
-        background-color: $primary-color;
-        color: $secondary-color;
+        background-color: $secondary-color;
+        color: $primary-color;
+        cursor: not-allowed;
+      }
+
+      &.notReady {
+        background-color: $secondary-color;
+        color: $primary-color;
         cursor: not-allowed;
       }
     }
@@ -159,7 +208,6 @@ a {
 
   font-size: 1rem;
   text-transform: uppercase;
-  font-weight: bold;
 
   border-bottom: 1px solid $secondary-color;
 }

@@ -11,6 +11,9 @@
 
     <base href="/ex05_06_06_25_final/" />
 
+    <!-- FONTS -->
+    <link rel="stylesheet" href="https://use.typekit.net/due3riw.css" />
+
     <!-- STYLES -->
     <link rel="stylesheet" href="./style.css" />
 
@@ -35,7 +38,7 @@
     <div class="layout">
       <!-- MENU CARD / INTERACTIVE -->
       <div class="menu">
-        <div class="menu__title">Visualise Transport</div>
+        <div class="menu__title">→ Visualise Transport</div>
 
         <div class="menu__form">
           <label for="stationInput">Enter a Station</label>
@@ -44,6 +47,9 @@
             id="stationInput"
             placeholder="Departure Station Name"
           />
+
+          <div id="autocompleteList" class="autocomplete-items"></div>
+
           <button class="submitBtn" id="loadButton">Load connections</button>
         </div>
       </div>
@@ -54,7 +60,7 @@
         <div>iad fs25 - zhdk</div>
         <div>webtechnologies</div>
         <div>
-          <a href="https://github.com/bonjourclaudio">github</a>
+          <a href="https://github.com/bonjourclaudio">→ github</a>
         </div>
       </div>
 
@@ -68,7 +74,7 @@
           <div id="station"></div>
           <div id="track"></div>
           <div id="time"></div>
-          <div id="fsBtn">> enable fullscreen</div>
+          <div id="fsBtn">→ enable fullscreen</div>
         </div>
       </div>
     </div>

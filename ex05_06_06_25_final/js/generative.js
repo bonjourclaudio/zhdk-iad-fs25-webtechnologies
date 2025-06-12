@@ -12,14 +12,16 @@ let fft;
 
 // Intro Animation - before visuals are shown
 let showIntro = false;
-let introText = "";
+let departureStationName = "";
 let introStartTime = 0;
 const introDuration = 3000;
+let introCurrentCell = 0;
+let introCellsTotal = 0;
 
 // Params for the visuals
 let noiseScale = 0.1; // noise frequency — lower = bigger smooth areas
 let noiseThreshold = 0.4; // controls empty vs. solid blocks
-let zOffset = 0; // animation offset
+let zOffset = 0; // animation offset - don't change this
 
 function preload() {
   // Load sound files from assets
@@ -31,6 +33,7 @@ function preload() {
 
   // Display loading indicator since canvas isn't ready yet
   document.querySelector(".visuals__loader").style.display = "block";
+  document.querySelector(".submitBtn").classList.add("notReady");
 }
 
 /**
@@ -43,9 +46,13 @@ function initConnection() {
 
   if (stationName) {
     // Display intro animation
-    introText = `Loading ${stationName}...`;
+    departureStationName = stationName;
     showIntro = true;
     introStartTime = millis();
+
+    // Reset intro animation state
+    introCurrentCell = 0;
+    introCellsTotal = cols * rows;
 
     // Retrieve connections for the entered station
     fetchConnections(stationName);
@@ -83,6 +90,7 @@ function setup() {
 
   // Hide loading once the canvas is ready
   document.querySelector(".visuals__loader").style.display = "none";
+  document.querySelector(".submitBtn").classList.remove("notReady");
 }
 
 // Main P5 draw function - called every frame
@@ -91,7 +99,7 @@ function draw() {
 
   // If the intro animation is active, draw it
   if (showIntro) {
-    drawIntroText();
+    initIntroAnimation();
 
     // Check if the intro duration has passed
     if (millis() - introStartTime > introDuration) {
@@ -116,6 +124,13 @@ function draw() {
 // Draws the altered grid of blocks with noise and glitches
 function drawGrid() {
   noStroke();
+
+  let furthestDistance =
+    connectionContainer.getFurthestStation().distanceToDeparture;
+
+  noiseThreshold = map(furthestDistance, 0, 500, 0.3, 0.8);
+
+  console.log(noiseThreshold);
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -167,7 +182,7 @@ function drawGrid() {
  *
  */
 function drawNoiseBlock(x, y, w, h) {
-  const density = 200; // how many dots per block
+  const density = 100; // how many dots per block
 
   for (let n = 0; n < density; n++) {
     const px = x + random(w);
@@ -250,13 +265,18 @@ function translateCoordinates(lat, lon) {
  * The stations are drawn as circles at their respective coordinates
  */
 function drawStations() {
-  connectionContainer.stations.forEach((station) => {
+  connectionContainer.stations.forEach((station, i) => {
     const position = translateCoordinates(station.lat, station.lon);
 
     // Map the coordinates to the grid size
     const cellX = Math.floor(position.x / size) * size + size / 2;
     const cellY = Math.floor(position.y / size) * size + size / 2;
-    circle(cellX, cellY, size);
+
+    if (i == 0) {
+      circle(cellX, cellY, size * 1.5);
+    } else {
+      circle(cellX, cellY, size);
+    }
   });
 }
 
@@ -280,10 +300,36 @@ function playNextTrack() {
 /**
  * Intro Animation
  */
-function drawIntroText() {
-  textAlign(CENTER, CENTER);
-  textSize(48);
-  fill(255);
+function initIntroAnimation() {
+  const size = Math.max(width / cols, height / rows);
 
-  text(introText, width / 2, height / 2);
+  let stationNameLetters = departureStationName.split("");
+  let currentStationLetter = 0;
+
+  for (let i = 0; i < introCurrentCell; i++) {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+
+    const x = col * size;
+    const y = row * size;
+
+    stroke(255);
+    noFill();
+    rect(x, y, size, size);
+
+    noStroke();
+    fill(255);
+    textSize(48);
+    textFont("alfabet");
+    textAlign(CENTER, CENTER);
+    text(stationNameLetters[currentStationLetter], x + size / 2, y + size / 2);
+    currentStationLetter++;
+    if (currentStationLetter >= stationNameLetters.length) {
+      currentStationLetter = 0; // Reset to loop through the letters
+    }
+  }
+
+  if (introCurrentCell < introCellsTotal) {
+    introCurrentCell++;
+  }
 }

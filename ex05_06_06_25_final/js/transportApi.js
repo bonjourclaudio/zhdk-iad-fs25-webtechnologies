@@ -8,6 +8,7 @@ class Station {
   name;
   lat;
   lon;
+  distanceToDeparture = 0;
 }
 
 /**
@@ -26,6 +27,16 @@ class Connection {
     } else {
       console.error("Invalid station object");
     }
+  }
+
+  getFurthestStation() {
+    if (this.stations.length === 0) return null;
+
+    return this.stations.reduce((furthest, current) => {
+      return current.distanceToDeparture > furthest.distanceToDeparture
+        ? current
+        : furthest;
+    });
   }
 }
 
@@ -80,10 +91,18 @@ async function fetchConnections(stationName) {
               return null;
             }
 
+            let distance = haversineDistance(
+              departureStation.lat,
+              departureStation.lon,
+              coords.lat,
+              coords.lon
+            );
+
             let destinationStation = new Station();
             destinationStation.name = entry.to;
             destinationStation.lat = coords.lat;
             destinationStation.lon = coords.lon;
+            destinationStation.distanceToDeparture = distance;
 
             connectionContainer.addStation(destinationStation);
           });
@@ -91,14 +110,16 @@ async function fetchConnections(stationName) {
       });
     }
 
+    document.querySelector(".visuals").style.visibility = "visible";
     // Toggle p5 sound output
     playNextTrack();
+
+    console.log(connectionContainer);
   } catch (error) {
     console.error("Error fetching transport data:", error);
   } finally {
     toggleLoading(false);
     displayInfo();
-    console.log("connection container", connectionContainer);
   }
 }
 
@@ -134,3 +155,86 @@ async function fetchStationCoordinates(stationName) {
     return null;
   }
 }
+
+/**
+ * (CHAT GPT GENERATED)
+ * Calculates the Haversine distance between two geographical points.
+ * @param {number} lat1 - Latitude of the first point.
+ * @param {number} lon1 - Longitude of the first point.
+ * @param {number} lat2 - Latitude of the second point.
+ * @param {number} lon2 - Longitude of the second point.
+ * @returns {number} - The distance in kilometers.
+ */
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Earth's radius in km
+  const toRad = (angle) => (angle * Math.PI) / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c; // distance in km
+}
+
+/**
+ * Autocomplete functionality for the station input field
+ */
+
+const stationInput = document.getElementById("stationInput");
+const autocompleteList = document.getElementById("autocompleteList");
+
+stationInput.addEventListener("input", async function () {
+  const query = this.value.trim();
+
+  if (query.length < 2) {
+    autocompleteList.innerHTML = "";
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://transport.opendata.ch/v1/locations?query=${encodeURIComponent(
+        query
+      )}&type=station`
+    );
+    const data = await response.json();
+
+    autocompleteList.innerHTML = "";
+
+    data.stations.forEach((station) => {
+      const item = document.createElement("div");
+      item.textContent = station.name;
+
+      item.addEventListener("click", () => {
+        stationInput.value = station.name;
+
+        // Trigger your connection logic here:
+        departureStationName = station.name;
+        showIntro = true;
+        introStartTime = millis();
+        introCurrentCell = 0;
+        introCellsTotal = cols * rows;
+
+        fetchConnections(station.name);
+
+        // Clear the autocomplete list
+        autocompleteList.innerHTML = "";
+      });
+
+      autocompleteList.appendChild(item);
+    });
+  } catch (error) {
+    console.error("Error fetching stations:", error);
+  }
+});
+
+document.addEventListener("click", function (e) {
+  if (e.target !== stationInput) {
+    autocompleteList.innerHTML = "";
+  }
+});
