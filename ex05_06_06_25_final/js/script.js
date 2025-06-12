@@ -21,10 +21,13 @@ function displayInfo() {
 
   if (connectionContainer && connectionContainer.stations.length > 0) {
     const departureStation = connectionContainer.stations[0];
+
     track.textContent = `Track: ${soundTracks[currentTrackIndex].url}`;
     station.textContent = `Station: ${departureStation.name}`;
     setInterval(() => {
-      time.textContent = `Time: ${new Date().toLocaleTimeString()}`;
+      time.textContent = `Time: ${new Date().toLocaleTimeString("de-CH", {
+        timeZone: "Europe/Zurich",
+      })}`;
     }, 1000);
   } else {
     track.textContent = "No track information available.";

@@ -9,6 +9,7 @@ class Station {
   lat;
   lon;
   distanceToDeparture = 0;
+  stationImageUrl;
 }
 
 /**
@@ -60,6 +61,12 @@ async function fetchConnections(stationName) {
     departureStation.name = stationName;
     departureStation.lat = stationCoords.lat;
     departureStation.lon = stationCoords.lon;
+
+    retrieveStationImage(
+      latLonToTile(departureStation.lat, departureStation.lon, 18)
+    ).then((imageUrl) => {
+      departureStation.stationImageUrl = imageUrl;
+    });
 
     /**
      * Fetch stationboard for the given station
@@ -113,8 +120,6 @@ async function fetchConnections(stationName) {
     document.querySelector(".visuals").style.visibility = "visible";
     // Toggle p5 sound output
     playNextTrack();
-
-    console.log(connectionContainer);
   } catch (error) {
     console.error("Error fetching transport data:", error);
   } finally {
@@ -213,16 +218,8 @@ stationInput.addEventListener("input", async function () {
       item.addEventListener("click", () => {
         stationInput.value = station.name;
 
-        // Trigger your connection logic here:
-        departureStationName = station.name;
-        showIntro = true;
-        introStartTime = millis();
-        introCurrentCell = 0;
-        introCellsTotal = cols * rows;
+        initConnection();
 
-        fetchConnections(station.name);
-
-        // Clear the autocomplete list
         autocompleteList.innerHTML = "";
       });
 
@@ -238,3 +235,34 @@ document.addEventListener("click", function (e) {
     autocompleteList.innerHTML = "";
   }
 });
+
+/**
+ * Convert latitude and longitude to tile coordinates (used for openstreetmap)
+ * @param {number} lat - Latitude in degrees
+ * @param {number} lon - Longitude in degrees
+ * @param {number} zoom - Zoom level
+ * @returns {Object} - An object containing x and y tile coordinates
+ */
+function latLonToTile(lat, lon, zoom) {
+  const latRad = (lat * Math.PI) / 180;
+  const n = Math.pow(2, zoom);
+  const xTile = ((lon + 180) / 360) * n;
+  const yTile =
+    ((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n;
+  return {
+    x: Math.floor(xTile),
+    y: Math.floor(yTile),
+    zoom: zoom,
+  };
+}
+
+async function retrieveStationImage(tileCoordinates) {
+  const { x, y, zoom } = tileCoordinates;
+  const url = `https://a.tile.openstreetmap.org/${zoom}/${x}/${y}.png`;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch image: ${response.statusText}`);
+  }
+  return url;
+}

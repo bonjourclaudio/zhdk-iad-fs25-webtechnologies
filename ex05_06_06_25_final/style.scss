@@ -76,6 +76,12 @@ a {
 
     @include alfabet(400, italic);
 
+    #station {
+      // new line after 10 characters
+      width: 10rem;
+      height: fit-content;
+    }
+
     #fsBtn {
       cursor: pointer;
       @include alfabet(bold, italic);

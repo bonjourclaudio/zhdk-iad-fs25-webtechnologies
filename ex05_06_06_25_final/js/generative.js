@@ -61,10 +61,6 @@ function initConnection() {
 
 // Main P5 setup function - set the canvas
 function setup() {
-  // FFT needed for the sound output
-  // 0.9 is smoothing, 1024 is the number of frequency bins
-  fft = new p5.FFT(0.9, 1024);
-
   // Use the parent container to set the canvas size and always fill it
   const parent = document.getElementById("p5Container");
   canvas = createCanvas(parent.offsetWidth, parent.offsetHeight);
@@ -128,9 +124,11 @@ function drawGrid() {
   let furthestDistance =
     connectionContainer.getFurthestStation().distanceToDeparture;
 
-  noiseThreshold = map(furthestDistance, 0, 500, 0.3, 0.8);
+  /*let img = createImg(connectionContainer.stations[0].stationImageUrl);
 
-  console.log(noiseThreshold);
+  image(img, 0, 0, width, height);*/
+
+  noiseThreshold = map(furthestDistance, 0, 500, 0.3, 0.8);
 
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -285,6 +283,10 @@ function drawStations() {
  * Gets called every time a new station is loaded
  */
 function playNextTrack() {
+  // FFT needed for the sound output
+  // 0.9 is smoothing, 1024 is the number of frequency bins
+  fft = new p5.FFT(0.9, 1024);
+
   if (currentSound) {
     currentSound.stop();
   }
