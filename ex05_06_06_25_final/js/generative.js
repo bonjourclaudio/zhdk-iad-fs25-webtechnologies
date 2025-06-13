@@ -277,6 +277,7 @@ function drawStations() {
     const cellY = Math.floor(position.y / size) * size + size / 2;
 
     if (i == 0) {
+      // Make the departure station larger
       circle(cellX, cellY, size * 1.5);
     } else {
       circle(cellX, cellY, size);
