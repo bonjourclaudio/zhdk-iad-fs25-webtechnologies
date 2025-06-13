@@ -124,9 +124,15 @@ function drawGrid() {
   let furthestDistance =
     connectionContainer.getFurthestStation().distanceToDeparture;
 
-  /*let img = createImg(connectionContainer.stations[0].stationImageUrl);
+  /*
+  let img = createImg(
+    connectionContainer.stations[0].stationImageUrl,
+    "Station Image of Departure Station"
+  );
 
-  image(img, 0, 0, width, height);*/
+  tint(255, 0, 0, 100);
+  image(img, mouseX - width / 2, mouseY - height / 2, width, height);
+  */
 
   noiseThreshold = map(furthestDistance, 0, 500, 0.3, 0.8);
 
